@@ -1,12 +1,13 @@
 import React from "react";
-import { Add } from "./TodoList";
+import { TodoList } from "./components/TodoList";
+import './App.css'
 
 function App() {
 
   return (
-    <div style={{padding: 32}}>
-      <Add  />
-    </div>
+    <>
+      <TodoList  />
+    </>
   )
 }
 
