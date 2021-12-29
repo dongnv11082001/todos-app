@@ -28,7 +28,7 @@ const Input = styled.input`
   border: 1px solid #ff9900;
   border-radius: 10px;
   display: block;
-  margin: 0.3rem 1rem 0 0;
+  margin: 0 1rem 0 0;
   flex: 3;
 `;
 

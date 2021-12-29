@@ -11,3 +11,17 @@ body {
   background: #333;
   font-family: 'Nunito', sans-serif;
 }
+
+h1 {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.line-through {
+  text-decoration: line-through;
+}
+
+.active {
+  background-color: #ff9900;
+  color: white;
+}
