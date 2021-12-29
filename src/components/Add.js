@@ -5,7 +5,11 @@ import { PlusOutlined } from '@ant-design/icons';
 export const Add = ({ todo, handleInputChange, handleSubmit }) => {
   return (
     <Form>
-      <Input value={todo} onChange={handleInputChange} placeholder='Your todo...'/>
+      <Input
+        value={todo}
+        onChange={handleInputChange}
+        placeholder="Your todo..."
+      />
       <Button onClick={handleSubmit}>
         <PlusOutlined />
       </Button>

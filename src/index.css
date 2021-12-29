@@ -19,9 +19,14 @@ h1 {
 
 .line-through {
   text-decoration: line-through;
+  color: #666;
 }
 
 .active {
   background-color: #ff9900;
   color: white;
+}
+
+.hide-button {
+  display: none;
 }

@@ -1,26 +1,30 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { CheckOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
+import { CRUDContext } from '../App';
 
-export const TodoItem = ({
-  todo,
-  handleComplete,
-  handleEditClick,
-  handleDelete,
-}) => {
+export const TodoItem = ({ todo }) => {
+  const context = useContext(CRUDContext);
+
   return (
     <List>
       <TextItem className={todo.completed ? 'line-through' : 'not-completed'}>
         {todo.text}
       </TextItem>
       <div>
-        <CompleteButton onClick={() => handleComplete(todo)}>
+        <CompleteButton
+          onClick={() => context.handleComplete(todo)}
+          className={todo.completed ? 'hide-button' : ''}
+        >
           <CheckOutlined />
         </CompleteButton>
-        <EditButton onClick={() => handleEditClick(todo)}>
+        <EditButton
+          onClick={() => context.handleEditClick(todo)}
+          className={todo.completed ? 'hide-button' : ''}
+        >
           <EditOutlined />
         </EditButton>
-        <DeleteButton onClick={() => handleDelete(todo.id)}>
+        <DeleteButton onClick={() => context.handleDelete(todo.id)}>
           <DeleteOutlined />
         </DeleteButton>
       </div>
@@ -38,8 +42,8 @@ const List = styled.div`
   border-bottom: 1px solid #333333;
 `;
 
-const TextItem = styled.h1`
-  color: #ff9900;
+const TextItem = styled.div`
+  font-size: 2.5rem;
 `;
 
 const Button = styled.button`

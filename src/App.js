@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createContext } from 'react';
 import styled from 'styled-components';
 import { TodoList } from './components/TodoList';
 import { Header } from './components/Header';
@@ -74,6 +74,12 @@ function App() {
     );
   };
 
+  const value = {
+    handleComplete,
+    handleEditClick,
+    handleDelete,
+  };
+
   return (
     <div>
       <Header />
@@ -93,17 +99,15 @@ function App() {
             handleSubmit={handleSubmit}
             handleInputChange={handleInputChange}
           />
-          <TodoList
-            todos={todos}
-            handleDelete={handleDelete}
-            handleComplete={handleComplete}
-            handleEditClick={handleEditClick}
-          />
+          <CRUDContext.Provider value={value}>
+            <TodoList todos={todos} />
+          </CRUDContext.Provider>
         </Container>
       )}
     </div>
   );
 }
+export const CRUDContext = createContext();
 
 export default App;
 
