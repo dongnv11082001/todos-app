@@ -6,32 +6,33 @@ import { Add } from './components/Add';
 import { Edit } from './components/Edit';
 
 function App() {
-  const [todos, setTodos] = useState(() => {
-    const savedTodos = localStorage.getItem('todos');
-    if (savedTodos) {
-      return JSON.parse(savedTodos);
-    } else {
-      return [];
-    }
-  });
+  const [todos, setTodos] = useState([]);
   const [todo, setTodo] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [currentTodo, setCurrentTodo] = useState({});
 
   useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
+    const fetchApi = async () => {
+      const response = await fetch(
+        'https://61cc6e98198df60017aec083.mockapi.io/todos'
+      );
+      const todos = await response.json();
+      setTodos(todos);
+    };
+    fetchApi();
+  }, []);
 
-  const handleSubmit = () => {
-    setTodos((prev) => [
-      ...prev,
+  const handleSubmit = async () => {
+    const response = await fetch(
+      'https://61cc6e98198df60017aec083.mockapi.io/todos',
       {
-        completed: false,
-        text: todo.trim(),
-        id: todos.length + 1,
-      },
-    ]);
-
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: todo }),
+      }
+    );
+    const todos = await response.json();
+    setTodos((prev) => [...prev, todos]);
     setTodo('');
   };
 
@@ -44,6 +45,10 @@ function App() {
   };
 
   const handleDelete = (id) => {
+    fetch(`https://61cc6e98198df60017aec083.mockapi.io/todos/${id}`, {
+      method: 'DELETE',
+    });
+
     const filterTodos = todos.filter((todo) => {
       return todo.id !== id;
     });
@@ -55,9 +60,15 @@ function App() {
     setCurrentTodo({ ...todo });
   };
 
-  const handleUpdate = (id, updatedtodo) => {
+  const handleUpdate = (id, updatedTodo) => {
+    fetch(`https://61cc6e98198df60017aec083.mockapi.io/todos/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedTodo),
+    });
+
     const updateItem = todos.map((todo) => {
-      return todo.id === id ? updatedtodo : todo;
+      return todo.id === id ? updatedTodo : todo;
     });
 
     setIsEditing(false);
@@ -68,10 +79,16 @@ function App() {
     setTodos(
       todos.map((item) => {
         return todo.id === item.id
-          ? { ...item, completed: !item.completed }
+          ? { ...item, complete: !item.complete }
           : item;
       })
     );
+
+    fetch(`https://61cc6e98198df60017aec083.mockapi.io/todos/${todo.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...todo, complete: true }),
+    });
   };
 
   const value = {

@@ -7,8 +7,8 @@ export const TodoList = ({ todos }) => {
 
   const filters = {
     All: () => true,
-    Active: (todo) => !todo.completed,
-    Completed: (todo) => todo.completed,
+    Active: (todo) => !todo.complete,
+    Completed: (todo) => todo.complete,
   };
 
   return (

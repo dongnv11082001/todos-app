@@ -8,19 +8,19 @@ export const TodoItem = ({ todo }) => {
 
   return (
     <List>
-      <TextItem className={todo.completed ? 'line-through' : 'not-completed'}>
+      <TextItem className={todo.complete ? 'line-through' : 'not-completed'}>
         {todo.text}
       </TextItem>
       <div>
         <CompleteButton
           onClick={() => context.handleComplete(todo)}
-          className={todo.completed ? 'hide-button' : ''}
+          className={todo.complete ? 'hide-button' : ''}
         >
           <CheckOutlined />
         </CompleteButton>
         <EditButton
           onClick={() => context.handleEditClick(todo)}
-          className={todo.completed ? 'hide-button' : ''}
+          className={todo.complete ? 'hide-button' : ''}
         >
           <EditOutlined />
         </EditButton>
@@ -43,7 +43,7 @@ const List = styled.div`
 `;
 
 const TextItem = styled.div`
-  font-size: 2.5rem;
+  font-size: 2rem;
 `;
 
 const Button = styled.button`
