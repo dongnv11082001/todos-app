@@ -1,8 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import { PlusOutlined } from '@ant-design/icons';
 
-export const Add = ({ todo, handleInputChange, handleSubmit }) => {
+export const Add = ({ handleSubmit }) => {
+  const [todo, setTodo] = useState('');
+
+  const handleInputChange = (e) => {
+    setTodo(e.target.value);
+  };
+
   return (
     <Form>
       <Input
@@ -10,7 +16,7 @@ export const Add = ({ todo, handleInputChange, handleSubmit }) => {
         onChange={handleInputChange}
         placeholder="Your todo..."
       />
-      <Button onClick={handleSubmit}>
+      <Button onClick={() => handleSubmit(todo)}>
         <PlusOutlined />
       </Button>
     </Form>

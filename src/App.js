@@ -7,7 +7,6 @@ import { Edit } from './components/Edit';
 
 function App() {
   const [todos, setTodos] = useState([]);
-  const [todo, setTodo] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [currentTodo, setCurrentTodo] = useState({});
 
@@ -22,7 +21,7 @@ function App() {
     fetchApi();
   }, []);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (todo) => {
     const response = await fetch(
       'https://61cc6e98198df60017aec083.mockapi.io/todos',
       {
@@ -33,11 +32,6 @@ function App() {
     );
     const todos = await response.json();
     setTodos((prev) => [...prev, todos]);
-    setTodo('');
-  };
-
-  const handleInputChange = (e) => {
-    setTodo(e.target.value);
   };
 
   const handleEditInputChange = (e) => {
@@ -111,11 +105,7 @@ function App() {
         </Container>
       ) : (
         <Container>
-          <Add
-            todo={todo}
-            handleSubmit={handleSubmit}
-            handleInputChange={handleInputChange}
-          />
+          <Add handleSubmit={handleSubmit} />
           <CRUDContext.Provider value={value}>
             <TodoList todos={todos} />
           </CRUDContext.Provider>
