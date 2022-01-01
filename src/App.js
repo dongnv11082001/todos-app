@@ -18,6 +18,10 @@ function App() {
   }, []);
 
   const handleSubmit = async (todo) => {
+    if (!todo) {
+      alert('Empty todo');
+      return;
+    }
     await axios
       .post('https://61cc6e98198df60017aec083.mockapi.io/todos', {
         text: todo,
