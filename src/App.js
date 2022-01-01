@@ -1,5 +1,6 @@
 import React, { useState, useEffect, createContext } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import { TodoList } from './components/TodoList';
 import { Header } from './components/Header';
 import { Add } from './components/Add';
@@ -11,27 +12,17 @@ function App() {
   const [currentTodo, setCurrentTodo] = useState({});
 
   useEffect(() => {
-    const fetchApi = async () => {
-      const response = await fetch(
-        'https://61cc6e98198df60017aec083.mockapi.io/todos'
-      );
-      const todos = await response.json();
-      setTodos(todos);
-    };
-    fetchApi();
+    axios
+      .get('https://61cc6e98198df60017aec083.mockapi.io/todos')
+      .then((todos) => setTodos(todos.data));
   }, []);
 
   const handleSubmit = async (todo) => {
-    const response = await fetch(
-      'https://61cc6e98198df60017aec083.mockapi.io/todos',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: todo }),
-      }
-    );
-    const todos = await response.json();
-    setTodos((prev) => [...prev, todos]);
+    await axios
+      .post('https://61cc6e98198df60017aec083.mockapi.io/todos', {
+        text: todo,
+      })
+      .then((res) => setTodos([...todos, res.data]));
   };
 
   const handleEditInputChange = (e) => {
@@ -39,13 +30,12 @@ function App() {
   };
 
   const handleDelete = (id) => {
-    fetch(`https://61cc6e98198df60017aec083.mockapi.io/todos/${id}`, {
-      method: 'DELETE',
-    });
+    axios.delete(`https://61cc6e98198df60017aec083.mockapi.io/todos/${id}`);
 
     const filterTodos = todos.filter((todo) => {
       return todo.id !== id;
     });
+
     setTodos(filterTodos);
   };
 
@@ -54,19 +44,17 @@ function App() {
     setCurrentTodo({ ...todo });
   };
 
-  const handleUpdate = (id, updatedTodo) => {
-    fetch(`https://61cc6e98198df60017aec083.mockapi.io/todos/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updatedTodo),
+  const handleUpdate = (id, item) => {
+    axios.put(`https://61cc6e98198df60017aec083.mockapi.io/todos/${id}`, {
+      item,
     });
 
-    const updateItem = todos.map((todo) => {
-      return todo.id === id ? updatedTodo : todo;
+    const updateTodos = todos.map((todo) => {
+      return todo.id === id ? item : todo;
     });
 
     setIsEditing(false);
-    setTodos(updateItem);
+    setTodos(updateTodos);
   };
 
   const handleComplete = (todo) => {
@@ -78,10 +66,9 @@ function App() {
       })
     );
 
-    fetch(`https://61cc6e98198df60017aec083.mockapi.io/todos/${todo.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...todo, complete: true }),
+    axios.put(`https://61cc6e98198df60017aec083.mockapi.io/todos/${todo.id}`, {
+      ...todo,
+      complete: true,
     });
   };
 
