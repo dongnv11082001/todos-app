@@ -48,13 +48,13 @@ function App() {
     setCurrentTodo({ ...todo });
   };
 
-  const handleUpdate = (id, item) => {
+  const handleUpdate = (id, currentTodo) => {
     axios.put(`https://61cc6e98198df60017aec083.mockapi.io/todos/${id}`, {
-      item,
+      ...currentTodo,
     });
 
     const updateTodos = todos.map((todo) => {
-      return todo.id === id ? item : todo;
+      return todo.id === id ? currentTodo : todo;
     });
 
     setIsEditing(false);
