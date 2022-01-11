@@ -43,7 +43,7 @@ const List = styled.div`
 `;
 
 const TextItem = styled.div`
-  font-size: 2rem;
+  font-size: 1.5rem;
 `;
 
 const Button = styled.button`

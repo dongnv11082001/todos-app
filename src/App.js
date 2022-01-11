@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from 'react';
+import React, { useState, useEffect, createContext, useRef } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { TodoList } from './components/TodoList';
@@ -7,9 +7,11 @@ import { Add } from './components/Add';
 import { Edit } from './components/Edit';
 
 function App() {
+  const [todo, setTodo] = useState('');
   const [todos, setTodos] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [currentTodo, setCurrentTodo] = useState({});
+  const refInput = useRef()
 
   useEffect(() => {
     axios
@@ -27,6 +29,13 @@ function App() {
         text: todo,
       })
       .then((res) => setTodos([...todos, res.data]));
+
+    setTodo('')
+    refInput.current.focus()
+  };
+
+  const handleInputChange = (e) => {
+    setTodo(e.target.value);
   };
 
   const handleEditInputChange = (e) => {
@@ -96,7 +105,12 @@ function App() {
         </Container>
       ) : (
         <Container>
-          <Add handleSubmit={handleSubmit} />
+          <Add
+            handleSubmit={handleSubmit}
+            handleInputChange={handleInputChange}
+            todo={todo}
+            refInput={refInput}
+          />
           <CRUDContext.Provider value={value}>
             <TodoList todos={todos} />
           </CRUDContext.Provider>
