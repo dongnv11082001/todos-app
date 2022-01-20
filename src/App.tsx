@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { TodoList } from './components/TodoList';
@@ -8,10 +8,14 @@ import { Edit } from './components/Edit';
 
 function App() {
   const [todo, setTodo] = useState('');
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [isEditing, setIsEditing] = useState(false);
-  const [currentTodo, setCurrentTodo] = useState({});
-  const refInput = useRef()
+  const [currentTodo, setCurrentTodo] = useState<Todo>({
+    id: '',
+    text: '',
+    complete: false,
+  });
+  const refInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     axios
@@ -19,7 +23,7 @@ function App() {
       .then((todos) => setTodos(todos.data));
   }, []);
 
-  const handleSubmit = async (todo) => {
+  const handleSubmit = async (todo: string) => {
     if (!todo) {
       alert('Empty todo');
       return;
@@ -30,19 +34,19 @@ function App() {
       })
       .then((res) => setTodos([...todos, res.data]));
 
-    setTodo('')
-    refInput.current.focus()
+    setTodo('');
+    refInput.current?.focus();
   };
 
-  const handleInputChange = (e) => {
-    setTodo(e.target.value);
+  const handleInputChange = (e: React.FormEvent<HTMLInputElement>) => {
+    setTodo(e.currentTarget.value);
   };
 
-  const handleEditInputChange = (e) => {
-    setCurrentTodo({ ...currentTodo, text: e.target.value });
+  const handleEditInputChange = (e: React.FormEvent<HTMLInputElement>) => {
+    setCurrentTodo({ ...currentTodo, text: e.currentTarget.value });
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: number | string) => {
     axios.delete(`https://61cc6e98198df60017aec083.mockapi.io/todos/${id}`);
 
     const filterTodos = todos.filter((todo) => {
@@ -52,12 +56,16 @@ function App() {
     setTodos(filterTodos);
   };
 
-  const handleEditClick = (todo) => {
+  const handleEditClick = (todo: Todo) => {
     setIsEditing(true);
     setCurrentTodo({ ...todo });
   };
 
-  const handleUpdate = (id, currentTodo) => {
+  const handleCancelEdit = () => {
+    setIsEditing(false)
+  }
+
+  const handleUpdate = (id: number | string, currentTodo: Todo) => {
     axios.put(`https://61cc6e98198df60017aec083.mockapi.io/todos/${id}`, {
       ...currentTodo,
     });
@@ -70,7 +78,7 @@ function App() {
     setTodos(updateTodos);
   };
 
-  const handleComplete = (todo) => {
+  const handleComplete = (todo: Todo) => {
     setTodos(
       todos.map((item) => {
         return todo.id === item.id
@@ -85,12 +93,6 @@ function App() {
     });
   };
 
-  const value = {
-    handleComplete,
-    handleEditClick,
-    handleDelete,
-  };
-
   return (
     <div>
       <Header />
@@ -98,7 +100,7 @@ function App() {
         <Container>
           <Edit
             currentTodo={currentTodo}
-            setIsEditing={setIsEditing}
+            handleCancelEdit={handleCancelEdit}
             handleUpdate={handleUpdate}
             handleEditInputChange={handleEditInputChange}
           />
@@ -109,17 +111,18 @@ function App() {
             handleSubmit={handleSubmit}
             handleInputChange={handleInputChange}
             todo={todo}
-            refInput={refInput}
           />
-          <CRUDContext.Provider value={value}>
-            <TodoList todos={todos} />
-          </CRUDContext.Provider>
+          <TodoList
+            todos={todos}
+            handleComplete={handleComplete}
+            handleEditClick={handleEditClick}
+            handleDelete={handleDelete}
+          />
         </Container>
       )}
     </div>
   );
 }
-export const CRUDContext = createContext();
 
 export default App;
 

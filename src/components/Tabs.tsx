@@ -1,15 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export const Tabs = ({type, setType}) => {
-  const tabs = ['All', 'Active', 'Completed'];
+export const Tabs = ({
+  currentTab,
+  changeTab,
+}: {
+  currentTab: string;
+  changeTab: (newTab: string) => void;
+}) => {
+  const tabs = ['All', 'Active', 'Complete'];
   return (
     <Tab>
       {tabs.map((tab) => (
         <span
-          className={type === tab ? 'active' : ''}
+          className={currentTab === tab ? 'active' : ''}
           key={tab}
-          onClick={() => setType(tab)}
+          onClick={() => changeTab(tab)}
         >
           {tab}
         </span>

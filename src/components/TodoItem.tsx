@@ -1,10 +1,21 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { CheckOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import { CRUDContext } from '../App';
+// import { CRUDContext } from '../App';
 
-export const TodoItem = ({ todo }) => {
-  const context = useContext(CRUDContext);
+type Props = {
+  todo: Todo;
+  handleComplete: (todo: Todo) => void;
+  handleEditClick: (todo: Todo) => void;
+  handleDelete: (id: number | string) => void;
+};
+
+export const TodoItem = ({
+  todo,
+  handleComplete,
+  handleEditClick,
+  handleDelete,
+}: Props) => {
 
   return (
     <List>
@@ -13,18 +24,18 @@ export const TodoItem = ({ todo }) => {
       </TextItem>
       <div>
         <CompleteButton
-          onClick={() => context.handleComplete(todo)}
+          onClick={() => handleComplete(todo)}
           className={todo.complete ? 'hide-button' : ''}
         >
           <CheckOutlined />
         </CompleteButton>
         <EditButton
-          onClick={() => context.handleEditClick(todo)}
+          onClick={() => handleEditClick(todo)}
           className={todo.complete ? 'hide-button' : ''}
         >
           <EditOutlined />
         </EditButton>
-        <DeleteButton onClick={() => context.handleDelete(todo.id)}>
+        <DeleteButton onClick={() => handleDelete(todo.id)}>
           <DeleteOutlined />
         </DeleteButton>
       </div>

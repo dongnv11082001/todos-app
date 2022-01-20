@@ -2,7 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import { PlusOutlined } from '@ant-design/icons';
 
-export const Add = ({ handleSubmit, handleInputChange, todo, refInput }) => {
+type Props = {
+  handleSubmit: (todo: string) => void ;
+  handleInputChange: (e: React.FormEvent<HTMLInputElement>) => void;
+  todo: string;
+  refInput?: React.MutableRefObject<HTMLInputElement>;
+};
+
+export const Add = ({ handleSubmit, handleInputChange, todo, refInput }: Props) => {
 
   return (
     <Form>

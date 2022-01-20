@@ -1,12 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 
+type Props = {
+  currentTodo: Todo;
+  handleCancelEdit: () => void;
+  handleEditInputChange: (e: React.FormEvent<HTMLInputElement>) => void;
+  handleUpdate: (id: number | string, todo: Todo) => void;
+};
+
 export const Edit = ({
   currentTodo,
-  setIsEditing,
+  handleCancelEdit,
   handleEditInputChange,
   handleUpdate,
-}) => {
+}: Props) => {
   return (
     <Form>
       <h1>Edit todo</h1>
@@ -19,7 +26,7 @@ export const Edit = ({
         <Button onClick={() => handleUpdate(currentTodo.id, currentTodo)}>
           Update
         </Button>
-        <Button onClick={() => setIsEditing(false)}>Cancel</Button>
+        <Button onClick={handleCancelEdit}>Cancel</Button>
       </div>
     </Form>
   );
@@ -55,5 +62,9 @@ const Button = styled.button`
   margin: 4px;
   cursor: pointer;
   background-color: transparent;
-  color: white
+  color: white;
+
+  &:hover {
+    background-color: #ff9900
+  }
 `;
