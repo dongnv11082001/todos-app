@@ -17,19 +17,22 @@ function App() {
   });
   const refInput = useRef<HTMLInputElement>(null);
 
+  const url: string = 'https://61cc6e98198df60017aec083.mockapi.io/todos'
+
   useEffect(() => {
     axios
-      .get('https://61cc6e98198df60017aec083.mockapi.io/todos')
+      .get(url)
       .then((todos) => setTodos(todos.data));
   }, []);
 
-  const handleSubmit = async (todo: string) => {
+  const handleSubmit = async (e: React.FormEvent, todo: string) => {
+    e.preventDefault()
     if (!todo) {
       alert('Empty todo');
       return;
     }
     await axios
-      .post('https://61cc6e98198df60017aec083.mockapi.io/todos', {
+      .post(url, {
         text: todo,
       })
       .then((res) => setTodos([...todos, res.data]));
@@ -47,7 +50,7 @@ function App() {
   };
 
   const handleDelete = (id: number | string) => {
-    axios.delete(`https://61cc6e98198df60017aec083.mockapi.io/todos/${id}`);
+    axios.delete(`${url}/${id}`);
 
     const filterTodos = todos.filter((todo) => {
       return todo.id !== id;
@@ -66,7 +69,7 @@ function App() {
   }
 
   const handleUpdate = (id: number | string, currentTodo: Todo) => {
-    axios.put(`https://61cc6e98198df60017aec083.mockapi.io/todos/${id}`, {
+    axios.put(`${url}/${id}`, {
       ...currentTodo,
     });
 
@@ -87,7 +90,7 @@ function App() {
       })
     );
 
-    axios.put(`https://61cc6e98198df60017aec083.mockapi.io/todos/${todo.id}`, {
+    axios.put(`${url}/${todo.id}`, {
       ...todo,
       complete: true,
     });

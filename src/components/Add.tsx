@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import styled from 'styled-components';
 import { PlusOutlined } from '@ant-design/icons';
 
 type Props = {
-  handleSubmit: (todo: string) => void ;
+  handleSubmit: (e: FormEvent, todo: string) => void ;
   handleInputChange: (e: React.FormEvent<HTMLInputElement>) => void;
   todo: string;
   refInput?: React.MutableRefObject<HTMLInputElement>;
@@ -19,7 +19,7 @@ export const Add = ({ handleSubmit, handleInputChange, todo, refInput }: Props) 
         placeholder="Your todo..."
         ref={refInput}
       />
-      <Button onClick={() => handleSubmit(todo)}>
+      <Button onClick={(e) => handleSubmit(e, todo)}>
         <PlusOutlined />
       </Button>
     </Form>
